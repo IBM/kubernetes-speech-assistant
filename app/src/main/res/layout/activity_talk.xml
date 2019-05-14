@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:orientation="vertical" >
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/authorize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/action_margin"
+        android:layout_marginRight="@dimen/action_margin"
+        android:text="LOGIN"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/signOut"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/action_margin"
+        android:layout_marginRight="@dimen/action_margin"
+        android:text="sign out"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/txtSpeechInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="70dp"
+        android:textColor="@color/white"
+        android:textSize="26dp"
+        android:textStyle="normal"
+        android:visibility="gone" />
+
+    <RadioGroup
+        android:id="@+id/ibmAccounts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical"
+        android:visibility="gone" />
+
+    <RadioGroup
+        android:id="@+id/ibmResourceGroups"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical"
+        android:visibility="gone" />
+
+    <ListView
+        android:id="@+id/clusterList"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_below="@+id/txtSpeechInput"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:textColor="@color/red"
+        android:textSize="20dp"
+        android:textStyle="normal"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/voiceLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageButton
+            android:id="@+id/btnSpeak"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:background="@null"
+            android:scaleType="centerInside"
+            android:src="@drawable/mic" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/tap_on_mic"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+</RelativeLayout>

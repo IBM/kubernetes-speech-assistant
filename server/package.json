@@ -1,0 +1,19 @@
+{
+  "name": "kubernetes-assistant-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "express": "^4.16.4",
+    "log4js": "^4.1.1",
+    "request": "^2.88.0",
+    "watson-developer-cloud": "^4.0.1"
+  }
+}
