@@ -1,4 +1,4 @@
-# Manage your Kubernetes clusters using Natural Language with the Kubernetes Speech Assistant Android app
+# Manage your Kubernetes clusters using Natural Language with the Kubernetes Speech Assistant Android application
 
 >A Kubernetes Assistant which can manage your Kubernetes clusters on IBM Cloud through voice
 
@@ -23,14 +23,29 @@ When the reader has completed this code pattern, they will understand how to:
   <img src="docs/doc-images/arch-flow.png">
 </p>
 
-The developer uses the IBM Blockchain Platform Extension for VS Code to:
-
-1. The Blockchain Operator sets up the IBM Blockchain Platform 2.0 service
-2. The IBM Blockchain Platform 2.0 enables to create a Hyperledger Fabric network onto a IBM Kubernetes Service, allowing to install and instantiate the Fabcar smart contract on the network
-3. The Node.js application server uses the Fabic sdk to interact with the deployed network on IBM Blockchain Platform 2.0 and creates APIs for a web client
-4. The Vue.js client uses the Node.js application API to interact with the network
-5. The User interacts with the Fabcar Vue.js web interface to update and query the blockchain ledger and state
-
+1. The user triggers a login into their IBM Cloud accounts on the Android App, if not previously setup.
+2. They are redirected to the IBM Cloud login page on their phone browsers, using the IBM IAM OpenID Connect Protocol.
+3. After successful authentication, a request is initiated to get a generic IAM token.
+4. The request sends the Authorization Code retrieved from Step 2 to the IBM IAM OpenID Connect Protocol to get the generic IAM token.
+5. A request is initiated to get the list of accounts associated with the cloud login.
+6. The request sends the generic IAM access token to the IBM Account Management API to retrieve the list of accounts associated with the user's cloud login. The user selects an account from the list.
+7. A request is initiated to get an IAM token for the selected account.
+8. The request sends the generic IAM refresh token and the selected account ID to the IBM IAM OpenID Connect Protocol to retrieve an IAM token linked to the selected cloud account.
+9. The IAM Authorization Token object is persisted on the user's device for future use, until expiration.
+10. A request is initiated to get the list of resource groups for the selected account.
+11. The request sends the account specific IAM access token to the IBM Resource Controller API to retrieve the list of resource groups associated with the account. The user selects a resource group from the list.
+12. A request is initiated to get a Watson Assistant session.
+13. The request talks to the Watson Assistant API SDK through the NodeJS server to get a new assitant session.
+14. The Android application setup is completed and the view is changed so that the user can start talking with the applicaton.
+15. The user sends a speech command to the application, by clicking the mic button and talking.
+16. The speech is converted to text using the native Android speech-2-text converter.
+17. A fresh IAM token request is issued using the previous IAM refresh token if the IAM access token has reached expiration.
+18. The fresh IAM access token/non-expired IAM access token, along with the user text input is sent to the NodeJS backend server on hosted on a Kubernetes cluster on the IBM cloud.
+19. The user text input is sent to the Watson Assistant to extract knowledge around the intent of the text and the different entities present.
+20. If the context for the user input is complete and all knowledge required to execute the Kubernetes command is obtained, a request is sent to the Kubernetes service API on IBM Cloud along with the user IAM access token and other parameters, to execute the command.
+21. The result of the executed command/a follow up question to get further details around the user request is sent to the Android application.
+22. The text received by the application is converted to speech by using the native Android text-2-speech converter.
+23. The speech is relayed to the user to continue the conversation.
 
 # Included components
 *	[IBM Watson Assistant](https://cloud.ibm.com/catalog/services/watson-assistant) Watson Assistant lets you build conversational interfaces into any application, device, or channel.
