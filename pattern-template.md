@@ -4,7 +4,7 @@ Kubernetes Speech Assistant powered by Watson Assistant and Kubernetes
 
 # Long title
 
-Manage your Kubernetes clusters using Natural Language with the Kubernetes Speech Assistant Android application
+Talk to an app which which can create and manage your kubernetes instances
 
 # Author
 
