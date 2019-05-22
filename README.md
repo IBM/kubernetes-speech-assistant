@@ -1,4 +1,4 @@
-# Manage your Kubernetes clusters using Natural Language with the Kubernetes Speech Assistant Android application
+# Talk to an app which which can create and manage your kubernetes instances
 
 >A Kubernetes Assistant which can manage your Kubernetes clusters on IBM Cloud through voice
 
