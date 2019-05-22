@@ -48,7 +48,7 @@ When the reader has completed this code pattern, they will understand how to:
 
 # Flow
 
-![Architecture flow](https://github.com/ash7594/customer-loyalty-program/blob/master/docs/doc-images/arch-flow.png?raw=true)
+![Architecture flow](https://github.com/ash7594/kubernetes-speech-assistant/blob/master/docs/doc-images/arch-flow.png?raw=true)
 
 **Note** The blockchain network will have multiple members and partners
 
