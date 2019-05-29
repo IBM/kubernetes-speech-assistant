@@ -1,0 +1,1285 @@
+{
+  "name": "talk-to-kubernetes",
+  "intents": [
+    {
+      "intent": "General_Affirmative",
+      "examples": [
+        {
+          "text": "yes"
+        },
+        {
+          "text": "yup"
+        },
+        {
+          "text": "you're the man"
+        },
+        {
+          "text": "correct"
+        },
+        {
+          "text": "thats right"
+        },
+        {
+          "text": "that's right"
+        },
+        {
+          "text": "yea"
+        },
+        {
+          "text": "yep"
+        }
+      ],
+      "description": "Affirmation"
+    },
+    {
+      "intent": "Delete_Cluster",
+      "examples": [
+        {
+          "text": "Erase my cluster"
+        },
+        {
+          "text": "remove my cluster"
+        },
+        {
+          "text": "delete kubernetes"
+        },
+        {
+          "text": "delete a k8's cluster"
+        },
+        {
+          "text": "delete a kubernetes cluster"
+        },
+        {
+          "text": "delete a cluster"
+        },
+        {
+          "text": "Destroy my cluster"
+        }
+      ],
+      "description": "Deletes a cluster"
+    },
+    {
+      "intent": "General_Greetings",
+      "examples": [
+        {
+          "text": "Hi there"
+        },
+        {
+          "text": "Good day"
+        },
+        {
+          "text": "How are you today?"
+        },
+        {
+          "text": "How have you been?"
+        },
+        {
+          "text": "How is it going?"
+        },
+        {
+          "text": "How r u?"
+        },
+        {
+          "text": "Looking good eve"
+        },
+        {
+          "text": "Ok take me back"
+        },
+        {
+          "text": "What's new?"
+        },
+        {
+          "text": "What's up?"
+        },
+        {
+          "text": "Who is this?"
+        },
+        {
+          "text": "You there"
+        },
+        {
+          "text": "How are things going?"
+        },
+        {
+          "text": "Good evening"
+        },
+        {
+          "text": "Good morning"
+        },
+        {
+          "text": "Good to see you"
+        },
+        {
+          "text": "Greetings"
+        },
+        {
+          "text": "Have you been well?"
+        },
+        {
+          "text": "Hello Agent"
+        },
+        {
+          "text": "Hello I am looking for some help here"
+        },
+        {
+          "text": "Hello"
+        },
+        {
+          "text": "Hey how are you doing"
+        },
+        {
+          "text": "Hey there all"
+        },
+        {
+          "text": "Hey there"
+        },
+        {
+          "text": "Hey twin"
+        },
+        {
+          "text": "Hey you"
+        },
+        {
+          "text": "Hi advisor"
+        }
+      ],
+      "description": "Greet the bot."
+    },
+    {
+      "intent": "Create_Cluster",
+      "examples": [
+        {
+          "text": "Create a cluster"
+        },
+        {
+          "text": "create cluster called anthony backend",
+          "mentions": [
+            {
+              "entity": "cluster_name_value",
+              "location": [
+                22,
+                37
+              ]
+            }
+          ]
+        },
+        {
+          "text": "create a cluster with name anton server",
+          "mentions": [
+            {
+              "entity": "cluster_name_value",
+              "location": [
+                27,
+                39
+              ]
+            }
+          ]
+        },
+        {
+          "text": "create a kubernetes cluster named ash cluster",
+          "mentions": [
+            {
+              "entity": "cluster_name_value",
+              "location": [
+                34,
+                45
+              ]
+            }
+          ]
+        },
+        {
+          "text": "provision a kubernetes cluster"
+        },
+        {
+          "text": "provision a cluster"
+        },
+        {
+          "text": "create a k8's cluster"
+        },
+        {
+          "text": "create a k8 cluster"
+        },
+        {
+          "text": "create a kubernetes cluster"
+        },
+        {
+          "text": "create a cluster named ralph - cluster",
+          "mentions": [
+            {
+              "entity": "cluster_name_value",
+              "location": [
+                23,
+                38
+              ]
+            }
+          ]
+        },
+        {
+          "text": "create a cluster named alpha ash",
+          "mentions": [
+            {
+              "entity": "cluster_name_value",
+              "location": [
+                23,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "text": "create a free cluster called knative",
+          "mentions": [
+            {
+              "entity": "cluster_name_value",
+              "location": [
+                29,
+                36
+              ]
+            }
+          ]
+        },
+        {
+          "text": "make a standard cluster named brad dev with 4 cores",
+          "mentions": [
+            {
+              "entity": "cluster_name_value",
+              "location": [
+                30,
+                38
+              ]
+            }
+          ]
+        },
+        {
+          "text": "create a k8's cluster called ash backend in u.s. east region",
+          "mentions": [
+            {
+              "entity": "cluster_name_value",
+              "location": [
+                29,
+                40
+              ]
+            }
+          ]
+        }
+      ],
+      "description": "Create a kubernetes cluster"
+    },
+    {
+      "intent": "Get_Cluster",
+      "examples": [
+        {
+          "text": "get my k8's cluster"
+        },
+        {
+          "text": "show my clusters"
+        },
+        {
+          "text": "retrieve my clusters"
+        },
+        {
+          "text": "show all the kubernetes clusters"
+        },
+        {
+          "text": "display my clusters"
+        },
+        {
+          "text": "show my pods"
+        },
+        {
+          "text": "get my clusters"
+        },
+        {
+          "text": "get my kubernetes clusters"
+        }
+      ],
+      "description": "Get cluster details"
+    }
+  ],
+  "entities": [
+    {
+      "entity": "cluster_type",
+      "values": [
+        {
+          "type": "synonyms",
+          "value": "standard",
+          "synonyms": [
+            "standards",
+            "normal",
+            "regular",
+            "standardised",
+            "usual",
+            "ordinary"
+          ]
+        },
+        {
+          "type": "synonyms",
+          "value": "free",
+          "synonyms": [
+            "free",
+            "complimentary",
+            "freely"
+          ]
+        }
+      ],
+      "fuzzy_match": true
+    },
+    {
+      "entity": "cluster_region",
+      "values": [
+        {
+          "type": "synonyms",
+          "value": "us-south",
+          "synonyms": [
+            "us south",
+            "united states south",
+            "united state south",
+            "u.s. south",
+            "u.s south"
+          ]
+        },
+        {
+          "type": "synonyms",
+          "value": "uk-south",
+          "synonyms": [
+            "uk south",
+            "united kingdom south"
+          ]
+        },
+        {
+          "type": "synonyms",
+          "value": "us-east",
+          "synonyms": [
+            "us east",
+            "united states east",
+            "united state east",
+            "u.s. east",
+            "u.s east"
+          ]
+        }
+      ],
+      "fuzzy_match": true
+    },
+    {
+      "entity": "sys-number",
+      "values": []
+    },
+    {
+      "entity": "cluster_name",
+      "values": [
+        {
+          "type": "synonyms",
+          "value": "name",
+          "synonyms": [
+            "named",
+            "names",
+            "naming",
+            "called",
+            "known",
+            "mentioned"
+          ]
+        }
+      ],
+      "fuzzy_match": true
+    },
+    {
+      "entity": "cluster_name_value",
+      "values": [
+        {
+          "type": "synonyms",
+          "value": "ralph - cluster",
+          "synonyms": []
+        },
+        {
+          "type": "synonyms",
+          "value": "knative",
+          "synonyms": []
+        },
+        {
+          "type": "synonyms",
+          "value": "alpha ash",
+          "synonyms": []
+        },
+        {
+          "type": "synonyms",
+          "value": "ash cluster",
+          "synonyms": []
+        },
+        {
+          "type": "synonyms",
+          "value": "anton server",
+          "synonyms": []
+        },
+        {
+          "type": "synonyms",
+          "value": "anthony backend",
+          "synonyms": []
+        },
+        {
+          "type": "synonyms",
+          "value": "ash backend",
+          "synonyms": []
+        },
+        {
+          "type": "synonyms",
+          "value": "brad dev",
+          "synonyms": []
+        }
+      ],
+      "fuzzy_match": true
+    },
+    {
+      "entity": "cluster_core",
+      "values": [
+        {
+          "type": "synonyms",
+          "value": "core",
+          "synonyms": [
+            "cores"
+          ]
+        }
+      ],
+      "fuzzy_match": true
+    },
+    {
+      "entity": "cluster_ram",
+      "values": [
+        {
+          "type": "synonyms",
+          "value": "ram",
+          "synonyms": [
+            "RAM",
+            "r.a.m.",
+            "memory",
+            "gb",
+            "gig",
+            "gigs"
+          ]
+        }
+      ],
+      "fuzzy_match": true
+    }
+  ],
+  "language": "en",
+  "metadata": {
+    "api_version": {
+      "major_version": "v1",
+      "minor_version": "2018-09-20"
+    }
+  },
+  "description": "",
+  "dialog_nodes": [
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "I didn't understand. Which region cluster do you want to delete?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_2_1557405396841",
+      "context": {
+        "conversation_context": {
+          "type": "Delete_Cluster",
+          "status": "error"
+        }
+      },
+      "metadata": {},
+      "next_step": {
+        "behavior": "jump_to",
+        "selector": "user_input",
+        "dialog_node": "node_4_1557405513871"
+      },
+      "conditions": "!@cluster_region",
+      "dialog_node": "node_5_1557405589744",
+      "previous_sibling": "node_4_1557405513871"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "@cluster_region"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_2_1557405396841",
+      "context": {
+        "conversation_context": {
+          "type": "Delete_Cluster",
+          "status": "region"
+        }
+      },
+      "metadata": {},
+      "conditions": "@cluster_region",
+      "dialog_node": "node_4_1557405513871"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "The number is invalid. which cluster number do you want to delete?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_3_1557405468807",
+      "context": {
+        "conversation_context": {
+          "type": "Delete_Cluster",
+          "status": "error"
+        }
+      },
+      "metadata": {},
+      "next_step": {
+        "behavior": "jump_to",
+        "selector": "user_input",
+        "dialog_node": "node_6_1557405977197"
+      },
+      "conditions": "!@sys-number || @sys-number<1",
+      "dialog_node": "node_7_1557406523185",
+      "previous_sibling": "node_6_1557405977197"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Got number to delete"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_3_1557405468807",
+      "metadata": {},
+      "conditions": "@sys-number >0",
+      "dialog_node": "node_6_1557405977197"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Okay, getting resources to delete cluster"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_1_1557405335726",
+      "context": {
+        "conversation_context": {
+          "type": "Delete_Cluster",
+          "status": "pending"
+        }
+      },
+      "metadata": {},
+      "conditions": "anything_else",
+      "dialog_node": "node_3_1557405468807",
+      "previous_sibling": "node_2_1557405396841"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Okay. Which region?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_1_1557405335726",
+      "context": {
+        "conversation_context": {
+          "type": "Delete_Cluster",
+          "status": "pending"
+        }
+      },
+      "metadata": {},
+      "conditions": "!@cluster_region",
+      "dialog_node": "node_2_1557405396841"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "standard"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_3_1557278363927",
+      "context": {
+        "conversation_context": {
+          "type": "Create_Cluster",
+          "status": "type"
+        }
+      },
+      "metadata": {},
+      "conditions": "@cluster_type:standard",
+      "dialog_node": "node_5_1557278461812",
+      "previous_sibling": "node_4_1557278400765"
+    },
+    {
+      "type": "standard",
+      "title": "Free cluster said after asking",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "free"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_3_1557278363927",
+      "context": {
+        "conversation_context": {
+          "type": "Create_Cluster",
+          "status": "type"
+        }
+      },
+      "metadata": {},
+      "conditions": "@cluster_type:free",
+      "dialog_node": "node_4_1557278400765"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "I didn't understand. How much memory RAM?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_10_1557278922093",
+      "context": {
+        "conversation_context": {
+          "type": "Create_Cluster",
+          "status": "error"
+        }
+      },
+      "metadata": {},
+      "next_step": {
+        "behavior": "jump_to",
+        "selector": "user_input",
+        "dialog_node": "node_11_1557278964753"
+      },
+      "conditions": "!@sys-number",
+      "dialog_node": "node_2_1557340660553",
+      "previous_sibling": "node_11_1557278964753"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "@sys-number ram"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_10_1557278922093",
+      "context": {
+        "conversation_context": {
+          "type": "Create_Cluster",
+          "status": "ram"
+        }
+      },
+      "metadata": {},
+      "conditions": "@sys-number",
+      "dialog_node": "node_11_1557278964753"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "I didn't understand. Which region clusters do you want to view?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_2_1557393950024",
+      "context": {
+        "conversation_context": {
+          "type": "Get_Cluster",
+          "status": "error"
+        }
+      },
+      "metadata": {},
+      "next_step": {
+        "behavior": "jump_to",
+        "selector": "user_input",
+        "dialog_node": "node_3_1557394123984"
+      },
+      "conditions": "!@cluster_region",
+      "dialog_node": "node_4_1557394244960",
+      "previous_sibling": "node_3_1557394123984"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "@cluster_region"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_2_1557393950024",
+      "context": {
+        "conversation_context": {
+          "type": "Get_Cluster",
+          "status": "region"
+        }
+      },
+      "metadata": {},
+      "conditions": "@cluster_region",
+      "dialog_node": "node_3_1557394123984"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "named <? input.text ?>"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_1_1557368843313",
+      "context": {
+        "conversation_context": {
+          "type": "Create_Cluster",
+          "status": "named"
+        }
+      },
+      "metadata": {},
+      "conditions": "true",
+      "dialog_node": "node_2_1557368961476"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "I didn't understand. How many cores?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_8_1557278657931",
+      "context": {
+        "conversation_context": {
+          "type": "Create_Cluster",
+          "status": "error"
+        }
+      },
+      "metadata": {},
+      "next_step": {
+        "behavior": "jump_to",
+        "selector": "user_input",
+        "dialog_node": "node_9_1557278874028"
+      },
+      "conditions": "!@sys-number",
+      "dialog_node": "node_1_1557340490945",
+      "previous_sibling": "node_9_1557278874028"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "@sys-number core"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_8_1557278657931",
+      "context": {
+        "conversation_context": {
+          "type": "Create_Cluster",
+          "status": "core"
+        }
+      },
+      "metadata": {},
+      "conditions": "@sys-number",
+      "dialog_node": "node_9_1557278874028"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "I didn't understand. Which region do you want your cluster in?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_6_1557278501153",
+      "context": {
+        "conversation_context": {
+          "type": "Create_Cluster",
+          "status": "error"
+        }
+      },
+      "metadata": {},
+      "next_step": {
+        "behavior": "jump_to",
+        "selector": "user_input",
+        "dialog_node": "node_1_1557294341995"
+      },
+      "conditions": "!@cluster_region",
+      "dialog_node": "node_3_1557345170846",
+      "previous_sibling": "node_1_1557294341995"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "@cluster_region"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_6_1557278501153",
+      "context": {
+        "conversation_context": {
+          "type": "Create_Cluster",
+          "status": "region"
+        }
+      },
+      "metadata": {},
+      "conditions": "@cluster_region",
+      "dialog_node": "node_1_1557294341995"
+    },
+    {
+      "type": "standard",
+      "title": "If free cluster",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Okay, creating a free cluster"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_1_1557278321700",
+      "metadata": {},
+      "conditions": "@cluster_type:free",
+      "dialog_node": "node_2_1557278342577",
+      "previous_sibling": "node_3_1557278363927"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Okay, creating your final cluster"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_1_1557278321700",
+      "metadata": {},
+      "conditions": "anything_else",
+      "dialog_node": "node_4_1557369705076",
+      "previous_sibling": "node_10_1557278922093"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Okay. Do you want a free or standard cluster?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_1_1557278321700",
+      "context": {
+        "conversation_context": {
+          "type": "Create_Cluster",
+          "status": "pending"
+        }
+      },
+      "metadata": {},
+      "conditions": "!@cluster_type",
+      "dialog_node": "node_3_1557278363927",
+      "previous_sibling": "node_1_1557368843313"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Okay. How much machine RAM?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_1_1557278321700",
+      "context": {
+        "conversation_context": {
+          "type": "Create_Cluster",
+          "status": "pending"
+        }
+      },
+      "metadata": {},
+      "conditions": "!@cluster_ram",
+      "dialog_node": "node_10_1557278922093",
+      "previous_sibling": "node_8_1557278657931"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Okay. How many machine cores?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_1_1557278321700",
+      "context": {
+        "conversation_context": {
+          "type": "Create_Cluster",
+          "status": "pending"
+        }
+      },
+      "metadata": {},
+      "conditions": "!@cluster_core",
+      "dialog_node": "node_8_1557278657931",
+      "previous_sibling": "node_6_1557278501153"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Okay. Which region?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_1_1557278321700",
+      "context": {
+        "conversation_context": {
+          "type": "Create_Cluster",
+          "status": "pending"
+        }
+      },
+      "metadata": {},
+      "conditions": "!@cluster_region",
+      "dialog_node": "node_6_1557278501153",
+      "previous_sibling": "node_2_1557278342577"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "What do you want to call your cluster?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_1_1557278321700",
+      "context": {
+        "conversation_context": {
+          "type": "Create_Cluster",
+          "status": "pending"
+        }
+      },
+      "metadata": {},
+      "conditions": "!@cluster_name",
+      "dialog_node": "node_1_1557368843313"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Okay, here are the clusters you requested"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_1_1557392899151",
+      "metadata": {},
+      "conditions": "anything_else",
+      "dialog_node": "node_6_1557394541799",
+      "previous_sibling": "node_2_1557393950024"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Okay. Which region?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_1_1557392899151",
+      "context": {
+        "conversation_context": {
+          "type": "Get_Cluster",
+          "status": "pending"
+        }
+      },
+      "metadata": {},
+      "conditions": "!@cluster_region",
+      "dialog_node": "node_2_1557393950024"
+    },
+    {
+      "type": "standard",
+      "title": "Anything else",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "I didn't understand. You can try rephrasing."
+              },
+              {
+                "text": "Can you reword your statement? I'm not understanding."
+              },
+              {
+                "text": "I didn't get your meaning."
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "metadata": {},
+      "conditions": "anything_else",
+      "dialog_node": "Anything else",
+      "previous_sibling": "node_1_1557405335726"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": []
+      },
+      "context": {
+        "conversation_context": {
+          "type": "Create_Cluster",
+          "status": "pending"
+        }
+      },
+      "metadata": {},
+      "next_step": {
+        "behavior": "skip_user_input"
+      },
+      "conditions": "#Create_Cluster",
+      "dialog_node": "node_1_1557278321700",
+      "previous_sibling": "Welcome"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": []
+      },
+      "context": {
+        "conversation_context": {
+          "type": "Get_Cluster",
+          "status": "pending"
+        }
+      },
+      "metadata": {},
+      "next_step": {
+        "behavior": "skip_user_input"
+      },
+      "conditions": "#Get_Cluster",
+      "dialog_node": "node_1_1557392899151",
+      "previous_sibling": "node_1_1557278321700"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": []
+      },
+      "context": {
+        "conversation_context": {
+          "type": "Delete_Cluster",
+          "status": "pending"
+        }
+      },
+      "metadata": {},
+      "next_step": {
+        "behavior": "skip_user_input"
+      },
+      "conditions": "#Delete_Cluster",
+      "dialog_node": "node_1_1557405335726",
+      "previous_sibling": "node_1_1557392899151"
+    },
+    {
+      "type": "standard",
+      "title": "Welcome",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Hello. How can I help you?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "metadata": {},
+      "conditions": "welcome",
+      "dialog_node": "Welcome"
+    }
+  ],
+  "workspace_id": "125837fa-a148-492c-9157-87cc8cee3e4e",
+  "counterexamples": [],
+  "system_settings": {
+    "tooling": {
+      "store_generic_responses": true
+    }
+  },
+  "learning_opt_out": false,
+  "status": "Available"
+}
