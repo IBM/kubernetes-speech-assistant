@@ -18,7 +18,7 @@ Talk to an app which which can create and manage your kubernetes instances
 
 # Summary
 
-This code pattern is for developers looking to start building blockchain applications with Watson Assistant and the Kubernetes container service. Learn how to build an Android application using the IBM IAM OpenID and a Node.js backend server connected with Watson Assistant to build a speech assistant for Kubernetes on IBM Cloud.
+This code pattern is for developers looking to start building speech applications with Watson Assistant and the Kubernetes container service. Learn how to build an Android application using the IBM IAM OpenID and a Node.js backend server connected with Watson Assistant to build a speech assistant for Kubernetes on IBM Cloud.
 
 # Technologies
 
