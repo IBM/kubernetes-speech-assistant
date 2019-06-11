@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: kubernetes-assistant-server
-        image: docker.io/ash7594/kubernetes-assistant
+        image: docker.io/<DOCKERHUB_USERNAME>/kubernetes-assistant
         imagePullPolicy: Always
         ports:
           - containerPort: 8080

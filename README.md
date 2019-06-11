@@ -163,7 +163,34 @@ mv config-template.json config.json
 
 ## 5. Deploy NodeJS server to Kubernetes
 
-Steps coming
+* Navigate to the `server` directory in the cloned repository.
+
+```bash
+cd server
+```
+
+* Build the `Dockerfile` and push the image to your account on Dockerhub.
+
+```bash
+docker build -t <DOCKERHUB_USERNAME>/kubernetes-assistant .
+docker push <DOCKERHUB_USERNAME>/kubernetes-assistant
+```
+
+* Modify the `manifest.yml` file (Line 15), to replace `<DOCKERHUB_USERNAME>` to your username.
+
+* Go to your provisioned `Kubernetes` service on IBM Cloud, and run the commands displayed in the `access` tab.
+
+<br>
+<p align="center">
+  <img src="docs/doc-images/kubernetes-connect.png">
+</p>
+<br>
+
+* Deploy the `manifest.yml` on to your Kubernetes cluster.
+
+```bash
+kubectl apply -f manifest.yml
+```
 
 ## 6. Configure Android Application
 
