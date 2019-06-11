@@ -118,7 +118,7 @@ Create IAM steps coming...
 
 <br>
 <p align="center">
-  <img src="docs/doc-gifs/create-ibm-kubernetes-service.gif">
+  <img src="docs/doc-gifs/assistant-credentials.gif">
 </p>
 <br>
 
@@ -142,7 +142,7 @@ Create IAM steps coming...
 
 <br>
 <p align="center">
-  <img src="docs/doc-gifs/create-ibm-kubernetes-service.gif">
+  <img src="docs/doc-gifs/add-assistant-skill.gif">
 </p>
 <br>
 
@@ -150,9 +150,16 @@ Create IAM steps coming...
 
 <br>
 <p align="center">
-  <img src="docs/doc-gifs/create-ibm-kubernetes-service.gif">
+  <img src="docs/doc-gifs/assistant-id.gif">
 </p>
 <br>
+
+* Rename `server/config-template.json` to `config.json`.
+
+```bash
+cd server
+mv config-template.json config.json
+```
 
 ## 5. Deploy NodeJS server to Kubernetes
 
