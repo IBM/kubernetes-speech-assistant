@@ -1,0 +1,10 @@
+{
+  "apikey": "<ENTER>",
+  "iam_apikey_description": "<ENTER>",
+  "iam_apikey_name": "<ENTER>",
+  "iam_role_crn": "<ENTER>",
+  "iam_serviceid_crn": "<ENTER>",
+  "url": "<ENTER>",
+  "id": "<ENTER>",
+  "version": "<ENTER>"
+}
