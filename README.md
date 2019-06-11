@@ -126,7 +126,7 @@ Create IAM steps coming...
 
 <br>
 <p align="center">
-  <img src="docs/doc-gifs/create-ibm-kubernetes-service.gif">
+  <img src="docs/doc-gifs/launch-assistant.gif">
 </p>
 <br>
 
@@ -134,7 +134,7 @@ Create IAM steps coming...
 
 <br>
 <p align="center">
-  <img src="docs/doc-gifs/create-ibm-kubernetes-service.gif">
+  <img src="docs/doc-gifs/create-assistant-skill.gif">
 </p>
 <br>
 
