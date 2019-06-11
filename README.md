@@ -198,8 +198,10 @@ Steps coming...
 
 ## 7. Run the application
 
-Steps coming...
+Use `Android Studio` or the `CammandLine` to generate an APK and install the application on your Android Mobile device.
+Run the application.
 
+Watch the video here to check out a demo of the application:
 
 ## Links
 * [IBM Kubernetes REST Api](https://containers.cloud.ibm.com/swagger-api/#/)
