@@ -100,7 +100,7 @@ Create IAM steps coming...
 
 <br>
 <p align="center">
-  <img src="docs/doc-gifs/create-ibm-kubernetes-service.gif">
+  <img src="docs/doc-gifs/kubernetes-create.gif">
 </p>
 <br>
 
@@ -108,7 +108,7 @@ Create IAM steps coming...
 
 <br>
 <p align="center">
-  <img src="docs/doc-gifs/create-ibm-watson-assistant-service.gif">
+  <img src="docs/doc-gifs/assistant-create.gif">
 </p>
 <br>
 
