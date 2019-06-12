@@ -78,7 +78,7 @@ Follow these steps to set up and run this code pattern. The steps are described 
 2. [Setup IBM IAM](#2-setup-ibm-iam)
 3. [Create IBM Cloud services](#3-create-ibm-cloud-services)
 4. [Configure Watson Assistant](#4-configure-watson-assistant)
-5. [Deploy NodeJS server to Kubernetes](#5-deploy-nodejs-server-to-Kubernetes)
+5. [Deploy NodeJS server to Kubernetes](#5-deploy-nodejs-server-to-kubernetes)
 6. [Configure Android Application](#6-configure-android-application)
 7. [Run the application](#7-run-the-application)
 
@@ -88,7 +88,7 @@ Follow these steps to set up and run this code pattern. The steps are described 
 Clone this repository in a folder your choice:
 
 ```bash
-git clone https://github.com/IBM/Kubernetes-speech-assistant.git
+git clone https://github.com/IBM/kubernetes-speech-assistant.git
 cd Kubernetes-speech-assistant
 ```
 
@@ -107,7 +107,7 @@ cd Kubernetes-speech-assistant
 </p>
 <br>
 
-* Navigate to the file `app/src/main/java/com/example/Kubernetesassistant/AppConfigTemplate.java` and paste the `API_KEY` value with the one copied.
+* Navigate to the file `app/src/main/java/com/example/kubernetesassistant/AppConfigTemplate.java` and paste the `API_KEY` value with the one copied.
 
 <br>
 <p align="center">
@@ -115,20 +115,20 @@ cd Kubernetes-speech-assistant
 </p>
 <br>
  
-* Rename `app/src/main/java/com/example/Kubernetesassistant/AppConfigTemplate.java` to `app/src/main/java/com/example/Kubernetesassistant/AppConfig.java`.
+* Rename `app/src/main/java/com/example/kubernetesassistant/AppConfigTemplate.java` to `app/src/main/java/com/example/kubernetesassistant/AppConfig.java`.
 
 ```bash
-cd app/src/main/java/com/example/Kubernetesassistant
+cd app/src/main/java/com/example/kubernetesassistant
 mv AppConfigTemplate.java AppConfig.java
 ```
 
 ## 3. Create IBM Cloud services
 
-* Create the [IBM Cloud Kubernetes Service](https://cloud.ibm.com/catalog/infrastructure/containers-Kubernetes).  You can find the service in the `Catalog`.  For this code pattern, we can use the `Free` cluster, and give it a name.  Note, that the IBM Cloud allows one instance of a free cluster and expires after 30 days.
+* Create the [IBM Cloud Kubernetes Service](https://cloud.ibm.com/catalog/infrastructure/containers-kubernetes).  You can find the service in the `Catalog`.  For this code pattern, we can use the `Free` cluster, and give it a name.  Note, that the IBM Cloud allows one instance of a free cluster and expires after 30 days.
 
 <br>
 <p align="center">
-  <img src="docs/doc-gifs/Kubernetes-create.gif">
+  <img src="docs/doc-gifs/kubernetes-create.gif">
 </p>
 <br>
 
@@ -200,8 +200,8 @@ cd server
 * Build the `Dockerfile` and push the image to your account on Dockerhub.
 
 ```bash
-docker build -t <DOCKERHUB_USERNAME>/Kubernetes-assistant .
-docker push <DOCKERHUB_USERNAME>/Kubernetes-assistant
+docker build -t <DOCKERHUB_USERNAME>/kubernetes-assistant .
+docker push <DOCKERHUB_USERNAME>/kubernetes-assistant
 ```
 
 * Modify the `manifest.yml` file (Line 15), to replace `<DOCKERHUB_USERNAME>` to your username.
@@ -210,7 +210,7 @@ docker push <DOCKERHUB_USERNAME>/Kubernetes-assistant
 
 <br>
 <p align="center">
-  <img src="docs/doc-images/Kubernetes-connect.png">
+  <img src="docs/doc-images/kubernetes-connect.png">
 </p>
 <br>
 
@@ -225,7 +225,7 @@ kubectl apply -f manifest.yml
 ## 6. Configure Android Application
 
 * Open the codebase in `Android Studio` or an IDE of your choice.
-* Navigate to the file `app/src/main/java/com/example/Kubernetesassistant/AppConfig.java` and paste the `SERVER_URL` value with the IP address copied.
+* Navigate to the file `app/src/main/java/com/example/kubernetesassistant/AppConfig.java` and paste the `SERVER_URL` value with the IP address copied.
 
 ## 7. Run the application
 
