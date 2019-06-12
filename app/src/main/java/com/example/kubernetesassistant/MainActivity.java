@@ -1,12 +1,10 @@
 package com.example.kubernetesassistant;
 
-import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -29,21 +27,15 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
-import net.openid.appauth.AuthState;
-import net.openid.appauth.AuthorizationException;
-import net.openid.appauth.AuthorizationRequest;
-import net.openid.appauth.AuthorizationResponse;
-import net.openid.appauth.AuthorizationService;
-import net.openid.appauth.AuthorizationServiceConfiguration;
-import net.openid.appauth.TokenResponse;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,8 +47,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.example.kubernetesassistant.AppConfig.CLIENT_ID;
-import static com.example.kubernetesassistant.AppConfig.CLIENT_SECRET;
+import static com.example.kubernetesassistant.AppConfig.API_KEY;
 import static com.example.kubernetesassistant.AppConfig.SERVER_URL;
 import static com.example.kubernetesassistant.MainApplication.LOG_TAG;
 
@@ -67,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String USED_INTENT = "USED_INTENT";
     private static final String IBM_CLOUD_ACCOUNTS_URL = "https://accountmanagement.bluemix.net/coe/v2/accounts";
     private static final String IBM_CLOUD_RESOURCE_GROUPS_URL = "https://resource-controller.cloud.ibm.com/v1/resource_groups";
+    private static final String IBM_CLOUD_IAM_TOKEN_URL = "https://iam.cloud.ibm.com/identity/token";
+    private static final String IBM_CLOUD_IAM_AUTH_URL = "https://iam.cloud.ibm.com/identity/authorize";
 
     private final int REQ_CODE_SPEECH_INPUT = 100;
 
@@ -75,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     MainApplication mMainApplication;
 
     // state
-    AuthState mAuthState;
+    JSONObject mAuthState;
 
     RequestQueue httpQueue;
 
@@ -98,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
     JSONArray mClusterListVerbose;
     ArrayAdapter<String> mClusterListAdapter;
 
+    String mAccountId = "";
     String mConversationContext = "";
     String mPrevInput = "";
     String mRegion = "";
@@ -153,7 +147,8 @@ public class MainActivity extends AppCompatActivity {
                     int index = mRadioGroup.indexOfChild(rbn);
                     mRadioGroup.setVisibility(View.GONE);
 
-                    getIAMToken(mIbmAccountInfo.getJSONArray("resources").getJSONObject(index).getJSONObject("entity").getString("customer_id"));
+                    mAccountId = mIbmAccountInfo.getJSONArray("resources").getJSONObject(index).getJSONObject("entity").getString("customer_id");
+                    getIAMToken(mAccountId);
                 } catch (JSONException e) {
                     Log.e(LOG_TAG, e.toString());
                 }
@@ -210,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void toggleUI() {
-        if (mAuthState != null && mAuthState.isAuthorized()) {
+        if (mAuthState != null) {
             if (mSignOut.getVisibility() == View.GONE) {
                 mSignOut.setVisibility(View.VISIBLE);
             }
@@ -228,43 +223,60 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Exchanges the code, for the {@link TokenResponse}.
-     *
-     * @param intent represents the {@link Intent} from the Custom Tabs or the System Browser.
+     * Makes call with API-KEY to IAM.
      */
-    private void handleAuthorizationResponse(@NonNull Intent intent) {
+    private void startAuthorizationProcess() {
 
-        AuthorizationResponse response = AuthorizationResponse.fromIntent(intent);
-        AuthorizationException error = AuthorizationException.fromIntent(intent);
-        final AuthState authState = new AuthState(response, error);
+        StringRequest request = new StringRequest(
 
-        if (response != null) {
-            Log.i(LOG_TAG, String.format("Handled Authorization Response %s ", authState.toJsonString()));
-            AuthorizationService service = new AuthorizationService(this);
+                Request.Method.POST,
+                IBM_CLOUD_IAM_TOKEN_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String responseStr) {
+                        Log.i(LOG_TAG, responseStr);
+                        JSONObject response = null;
+                        try {
+                            response = new JSONObject(responseStr);
+                        } catch (JSONException e) {
+                            Log.e(LOG_TAG, e.toString());
+                        }
 
-            HashMap<String, String> additionalParams = new HashMap<>();
-            additionalParams.put("client_secret", CLIENT_SECRET);
+                        persistAuthState(response);
 
-            service.performTokenRequest(response.createTokenExchangeRequest(additionalParams), new AuthorizationService.TokenResponseCallback() {
-                @Override
-                public void onTokenRequestCompleted(@Nullable final TokenResponse tokenResponse, @Nullable AuthorizationException exception) {
-                    if (exception != null) {
-                        Log.w(LOG_TAG, "Token Exchange failed", exception);
-                    } else {
-                        if (tokenResponse != null) {
-                            authState.update(tokenResponse, exception);
-                            persistAuthState(authState);
-                            Log.i(LOG_TAG, "temp token: " + tokenResponse.accessToken);
-
-                            getAccountsAsccociatedWithLogin(tokenResponse);
+                        try {
+                            getAccountsAsccociatedWithLogin(response.getString("access_token"));
+                        } catch (JSONException e) {
+                            Log.e(LOG_TAG, e.toString());
                         }
                     }
-                }
-            });
-        }
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i(LOG_TAG, "HTTP ERROR: get initial iam token");
+                    }
+                }) {
+
+            @Override
+            public String getBodyContentType() {
+                return "application/x-www-form-urlencoded; charset=UTF-8";
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("grant_type", "urn:ibm:params:oauth:grant-type:apikey");
+                params.put("apikey", API_KEY);
+                return params;
+            }
+        };
+
+        httpQueue.add(request);
     }
 
-    private void getAccountsAsccociatedWithLogin(final TokenResponse tokenResponse) {
+    private void getAccountsAsccociatedWithLogin(final String accessToken) {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, IBM_CLOUD_ACCOUNTS_URL, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -275,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
                             if (response.getInt("total_results") > 0) {
                                 mRadioGroup.removeAllViews();
 
-                                for (int i = 0; i < response.getInt("total_results") ; i++) {
+                                for (int i = 0; i < response.getInt("total_results"); i++) {
                                     RadioButton rbn = new RadioButton(getApplicationContext());
                                     rbn.setId(View.generateViewId());
                                     rbn.setTextSize(26);
@@ -307,8 +319,8 @@ public class MainActivity extends AppCompatActivity {
         }) {
             @Override
             public Map<String, String> getHeaders() {
-                Map<String, String>  params = new HashMap<>();
-                params.put("Authorization", tokenResponse.tokenType.concat(" ").concat(tokenResponse.accessToken));
+                Map<String, String> params = new HashMap<>();
+                params.put("Authorization", "Bearer ".concat(accessToken));
                 return params;
             }
         };
@@ -316,32 +328,109 @@ public class MainActivity extends AppCompatActivity {
         httpQueue.add(request);
     }
 
-    private void getIAMToken(String accountId) {
-        AuthorizationService service = new AuthorizationService(this);
+    private void getIAMToken(final String accountId) {
+        StringRequest request = new StringRequest(
 
-        HashMap<String, String> additionalParams = new HashMap<>();
-        additionalParams.put("client_secret", CLIENT_SECRET);
-        additionalParams.put("account", accountId);
+                Request.Method.POST,
+                IBM_CLOUD_IAM_TOKEN_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String responseStr) {
+                        Log.i(LOG_TAG, responseStr);
+                        JSONObject response = null;
+                        try {
+                            response = new JSONObject(responseStr);
+                        } catch (JSONException e) {
+                            Log.e(LOG_TAG, e.toString());
+                        }
 
-        service.performTokenRequest(mAuthState.createTokenRefreshRequest(additionalParams), new AuthorizationService.TokenResponseCallback() {
-            @Override
-            public void onTokenRequestCompleted(@Nullable final TokenResponse tokenResponse, @Nullable AuthorizationException exception) {
-                if (exception != null) {
-                    Log.w(LOG_TAG, "Token Exchange failed", exception);
-                } else {
-                    if (tokenResponse != null) {
-                        mAuthState.update(tokenResponse, exception);
-                        persistAuthState(mAuthState);
-                        Log.i(LOG_TAG, "IAM token: " + tokenResponse.accessToken);
+                        persistAuthState(response);
 
-                        getResourceGroupsAssociatedWithAccount(tokenResponse);
+                        try {
+                            getResourceGroupsAssociatedWithAccount(response.getString("access_token"));
+                        } catch (JSONException e) {
+                            Log.e(LOG_TAG, e.toString());
+                        }
                     }
-                }
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i(LOG_TAG, "HTTP ERROR: get account iam token");
+                    }
+                }) {
+
+            @Override
+            public String getBodyContentType() {
+                return "application/x-www-form-urlencoded; charset=UTF-8";
             }
-        });
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("grant_type", "urn:ibm:params:oauth:grant-type:apikey");
+                params.put("apikey", API_KEY);
+                params.put("account", accountId);
+                return params;
+            }
+        };
+
+        httpQueue.add(request);
     }
 
-    private void getResourceGroupsAssociatedWithAccount(final TokenResponse tokenResponse) {
+    private void getFreshIAMTokenAndPerformVoiceRequest(final String voiceText) {
+        StringRequest request = new StringRequest(
+
+                Request.Method.POST,
+                IBM_CLOUD_IAM_TOKEN_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String responseStr) {
+                        Log.i(LOG_TAG, responseStr);
+                        JSONObject response = null;
+                        try {
+                            response = new JSONObject(responseStr);
+                        } catch (JSONException e) {
+                            Log.e(LOG_TAG, e.toString());
+                        }
+
+                        persistAuthState(response);
+
+                        try {
+                            performVoiceRequest(voiceText, response.getString("access_token"));
+                        } catch (JSONException e) {
+                            Log.e(LOG_TAG, e.toString());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i(LOG_TAG, "HTTP ERROR: get account iam token");
+                    }
+                }) {
+
+            @Override
+            public String getBodyContentType() {
+                return "application/x-www-form-urlencoded; charset=UTF-8";
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("grant_type", "urn:ibm:params:oauth:grant-type:apikey");
+                params.put("apikey", API_KEY);
+                params.put("account", mAccountId);
+                return params;
+            }
+        };
+
+        httpQueue.add(request);
+    }
+
+    private void getResourceGroupsAssociatedWithAccount(final String accessToken) {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, IBM_CLOUD_RESOURCE_GROUPS_URL, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -352,7 +441,7 @@ public class MainActivity extends AppCompatActivity {
                             if (response.getJSONArray("resources").length() > 0) {
                                 mRadioGroupForResources.removeAllViews();
 
-                                for (int i = 0; i < response.getJSONArray("resources").length() ; i++) {
+                                for (int i = 0; i < response.getJSONArray("resources").length(); i++) {
                                     RadioButton rbn = new RadioButton(getApplicationContext());
                                     rbn.setId(View.generateViewId());
                                     rbn.setTextSize(26);
@@ -380,8 +469,8 @@ public class MainActivity extends AppCompatActivity {
         }) {
             @Override
             public Map<String, String> getHeaders() {
-                Map<String, String>  params = new HashMap<>();
-                params.put("Authorization", tokenResponse.tokenType.concat(" ").concat(tokenResponse.accessToken));
+                Map<String, String> params = new HashMap<>();
+                params.put("Authorization", "Bearer ".concat(accessToken));
                 return params;
             }
         };
@@ -418,9 +507,9 @@ public class MainActivity extends AppCompatActivity {
         httpQueue.add(request);
     }
 
-    private void persistAuthState(@NonNull AuthState authState) {
+    private void persistAuthState(@NonNull JSONObject authState) {
         getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
-                .putString(AUTH_STATE, authState.toJsonString())
+                .putString(AUTH_STATE, authState.toString())
                 .apply();
         enablePostAuthorizationFlows();
     }
@@ -433,16 +522,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Nullable
-    private AuthState restoreAuthState() {
+    private JSONObject restoreAuthState() {
         String jsonString = getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
                 .getString(AUTH_STATE, null);
 
         if (!TextUtils.isEmpty(jsonString)) {
             try {
-                return AuthState.fromJson(jsonString);
-            } catch (JSONException jsonException) {
+                JSONObject json = new JSONObject(jsonString);
+                return json;
+            } catch (JSONException e) {
                 // should never happen
-                Log.i("fail", jsonException.toString());
+                Log.i("fail", e.toString());
             }
         }
         return null;
@@ -451,31 +541,10 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Kicks off the authorization flow.
      */
-    public static class AuthorizeListener implements Button.OnClickListener {
+    public class AuthorizeListener implements Button.OnClickListener {
         @Override
         public void onClick(View view) {
-
-            AuthorizationServiceConfiguration serviceConfiguration = new AuthorizationServiceConfiguration(
-                    Uri.parse("https://iam.cloud.ibm.com/identity/authorize") /* auth endpoint */,
-                    Uri.parse("https://iam.cloud.ibm.com/identity/token") /* token endpoint */
-            );
-
-            Uri redirectUri = Uri.parse("com.example.kubernetesassistant://oauth2callback");
-            AuthorizationRequest.Builder builder = new AuthorizationRequest.Builder(
-                    serviceConfiguration,
-                    CLIENT_ID,
-                    AuthorizationRequest.RESPONSE_TYPE_CODE,
-                    redirectUri
-            );
-            builder.setScopes("profile");
-            AuthorizationRequest request = builder.build();
-
-            AuthorizationService authorizationService = new AuthorizationService(view.getContext());
-
-            String action = "com.example.kubernetesassistant.HANDLE_AUTHORIZATION_RESPONSE";
-            Intent postAuthorizationIntent = new Intent(action);
-            PendingIntent pendingIntent = PendingIntent.getActivity(view.getContext(), request.hashCode(), postAuthorizationIntent, 0);
-            authorizationService.performAuthorizationRequest(request, pendingIntent);
+            startAuthorizationProcess();
         }
     }
 
@@ -498,7 +567,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Showing google speech input dialog
-     * */
+     */
     private void promptSpeechInput() {
         //performVoiceRequest("create standard cluster in us east with 6 cores and 8 ram");
 
@@ -519,7 +588,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Receiving speech input
-     * */
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -532,7 +601,9 @@ public class MainActivity extends AppCompatActivity {
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
                     mTxtSpeechInput.setText(result.get(0));
-                    performVoiceRequest(result.get(0));
+
+                    // Get fresh IAM token and perform action
+                    getFreshIAMTokenAndPerformVoiceRequest(result.get(0));
                 }
                 break;
             }
@@ -540,81 +611,71 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void performVoiceRequest(final String voiceText) {
-        AuthorizationService mAuthorizationService = new AuthorizationService(this);
+    private void performVoiceRequest(final String voiceText, final String accessToken) {
+        Log.i("fresh_token", accessToken);
 
-        HashMap<String, String> additionalParams = new HashMap<>();
-        additionalParams.put("client_secret", CLIENT_SECRET);
+        JSONObject jsonBody = new JSONObject();
 
-        mAuthState.performActionWithFreshTokens(mAuthorizationService, additionalParams, new AuthState.AuthStateAction() {
-            @Override
-            public void execute(@Nullable final String accessToken, @Nullable String idToken, @Nullable AuthorizationException e) {
-                Log.i("fresh_token", accessToken);
+        try {
+            jsonBody.put("authorization", "Bearer ".concat(accessToken));
+            jsonBody.put("resourceGroup", mResourceGroup);
+            jsonBody.put("input", voiceText);
+            jsonBody.put("session", mAssistantSession);
+            if (!mConversationContext.isEmpty())
+                jsonBody.put("conversationContext", mConversationContext);
+            if (!mPrevInput.isEmpty())
+                jsonBody.put("prevInput", mPrevInput);
+            if (!mRegion.isEmpty())
+                jsonBody.put("region", mRegion);
+            if (mClusterListVerbose.length() > 0)
+                jsonBody.put("clusterList", mClusterListVerbose);
+        } catch (JSONException err) {
+            Log.e(LOG_TAG, err.toString());
+            return;
+        }
 
-                JSONObject jsonBody = new JSONObject();
-
-                try {
-                    jsonBody.put("authorization", "Bearer ".concat(accessToken));
-                    jsonBody.put("resourceGroup", mResourceGroup);
-                    jsonBody.put("input", voiceText);
-                    jsonBody.put("session", mAssistantSession);
-                    if (!mConversationContext.isEmpty())
-                        jsonBody.put("conversationContext", mConversationContext);
-                    if (!mPrevInput.isEmpty())
-                        jsonBody.put("prevInput", mPrevInput);
-                    if (!mRegion.isEmpty())
-                        jsonBody.put("region", mRegion);
-                    if (mClusterListVerbose.length() > 0)
-                        jsonBody.put("clusterList", mClusterListVerbose);
-                } catch (JSONException err) {
-                    Log.e(LOG_TAG, err.toString());
-                    return;
-                }
-
-                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, SERVER_URL + "/message", jsonBody,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                Log.i(LOG_TAG, response.toString());
-                                handleClusterList(response);
-
-                                try {
-                                    if (response.has("context")) {
-                                        mConversationContext = response.getString("context");
-                                    }
-                                    if (response.has("input")) {
-                                        mPrevInput = response.getString("input");
-                                    }
-                                    if (response.has("region")) {
-                                        mRegion = response.getString("region");
-                                    }
-                                } catch (JSONException e) {
-                                    Log.e(LOG_TAG, e.toString());
-                                }
-
-                                try {
-                                    mTxtSpeechInput.setText(response.getString("text"));
-                                    talk(response.getString("text"));
-                                } catch(JSONException e) {
-                                    Log.e(LOG_TAG, e.toString());
-                                }
-                            }
-                        }, new Response.ErrorListener() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, SERVER_URL + "/message", jsonBody,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.i(LOG_TAG, error.toString());
+                    public void onResponse(JSONObject response) {
+                        Log.i(LOG_TAG, response.toString());
+                        handleClusterList(response);
+
+                        try {
+                            if (response.has("context")) {
+                                mConversationContext = response.getString("context");
+                            }
+                            if (response.has("input")) {
+                                mPrevInput = response.getString("input");
+                            }
+                            if (response.has("region")) {
+                                mRegion = response.getString("region");
+                            }
+                        } catch (JSONException e) {
+                            Log.e(LOG_TAG, e.toString());
+                        }
+
+                        try {
+                            mTxtSpeechInput.setText(response.getString("text"));
+                            talk(response.getString("text"));
+                        } catch (JSONException e) {
+                            Log.e(LOG_TAG, e.toString());
+                        }
                     }
-                });
-
-                request.setRetryPolicy(
-                        new DefaultRetryPolicy(
-                                0,
-                                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-                httpQueue.add(request);
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(LOG_TAG, error.toString());
             }
         });
+
+        request.setRetryPolicy(
+                new DefaultRetryPolicy(
+                        0,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        httpQueue.add(request);
     }
 
     private void handleClusterList(JSONObject json) {
@@ -631,9 +692,9 @@ public class MainActivity extends AppCompatActivity {
             mClusterList.clear();
             mClusterListVerbose = json.getJSONArray("data");
 
-            for (int i=0; i<mClusterListVerbose.length(); i++) {
+            for (int i = 0; i < mClusterListVerbose.length(); i++) {
                 JSONObject cluster = mClusterListVerbose.getJSONObject(i);
-                int num = i+1;
+                int num = i + 1;
                 mClusterList.add(num + ". " + cluster.getString("name"));
             }
 
@@ -660,33 +721,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        checkIntent(intent);
-    }
-
-    private void checkIntent(@Nullable Intent intent) {
-        Log.i(LOG_TAG, intent.toString());
-        if (intent != null) {
-            String action = intent.getAction();
-            Log.i(LOG_TAG, action);
-
-            switch (action) {
-                case "com.example.kubernetesassistant.HANDLE_AUTHORIZATION_RESPONSE":
-                    if (!intent.hasExtra(USED_INTENT)) {
-                        handleAuthorizationResponse(intent);
-                        intent.putExtra(USED_INTENT, true);
-                    }
-                    break;
-                default:
-                    // do nothing
-            }
-        }
-    }
-
-    @Override
     protected void onStart() {
         super.onStart();
-        checkIntent(getIntent());
     }
 
     @Override
