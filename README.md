@@ -86,13 +86,39 @@ Follow these steps to set up and run this code pattern. The steps are described 
 Clone this repository in a folder your choice:
 
 ```bash
-git clone https://github.com/ash7594/kubernetes-speech-assistant.git
+git clone https://github.com/IBM/kubernetes-speech-assistant.git
 cd kubernetes-speech-assistant
 ```
 
 ## 2. Setup IBM IAM
 
-Create IAM steps coming...
+* Login into your `IBM Cloud` account.
+* On the main dashboard, click `Manage` and under that `Access (IAM)`.
+* On the left pane, click `IBM Cloud API keys`.
+* Click on `Create an IBM Cloud API key`.
+* GIve your key a name and click `create`.
+* Copy the key.
+
+<br>
+<p align="center">
+  <img src="docs/doc-gifs/iam-create-apikey.gif">
+</p>
+<br>
+
+* Navigate to the file `app/src/main/java/com/example/kubernetesassistant/AppConfigTemplate.java` and paste the `API_KEY` value with the one copied.
+
+<br>
+<p align="center">
+  <img src="docs/doc-gifs/iam-replace-apikey.gif">
+</p>
+<br>
+ 
+* Rename `app/src/main/java/com/example/kubernetesassistant/AppConfigTemplate.java` to `app/src/main/java/com/example/kubernetesassistant/AppConfig.java`.
+
+```bash
+cd app/src/main/java/com/example/kubernetesassistant
+mv AppConfigTemplate.java AppConfig.java
+```
 
 ## 3. Create IBM Cloud services
 
