@@ -1,21 +1,23 @@
-# Talk to an app which which can create and manage your kubernetes instances
+# Talk to an app that can create and manage your Kubernetes instances
 
->A Kubernetes Assistant which can manage your Kubernetes clusters on IBM Cloud through voice
+>A Kubernetes Assistant that can manage your Kubernetes clusters on IBM Cloud through voice
 
-Imagine driving to work early in the morning, when you realise that you need to deploy a backend on a Kubernetes cluster which you are yet to provision. Knowing that provisioning a cluster could take several minutes after selecting the right configuration needed for your task, you visualize sitting in front of your computer staring idly at the screen, waiting for the cluster to be initialized and wishing that you could start work immediately.
+Imagine being away from your computer when you realize you need to deploy a back end on a Kubernetes cluster that you have not yet provisioned. Knowing that provisioning a cluster could take several minutes after selecting the right configuration for your task, you visualize sitting in front of your computer staring idly at the screen, waiting for the cluster to be initialized and wishing that you could start work immediately.
 
 Not in my world!
 
-This code pattern demonstrates a Kubernetes speech assistant application, to which you can simply talk to in natural language, and provision, view and manage your Kubernetes clusters without having the need to do it manually on the cloud interface. The pattern showcases an Android Application which the end user would interact with, and a NodeJs backend server that holds the application logic and talks to the IBM Cloud Kubernetes service. The pattern demostrates use of the IBM IAM OpenID using the OpenID Connect specifications for a native application, and showcases use of Watson Assistant to understand the natural language spoken by the user, holding the context of speech, and converting the user intent into executable Kubernetes commands to be performed on the IBM Cloud.
+This developer code pattern demonstrates a Kubernetes speech assistant application for an Android mobile device. You can simply talk on your phone in natural language to provision, view, and manage your Kubernetes clusters without having to do it manually on the cloud interface.
 
-When the reader has completed this code pattern, they will understand how to:
+The pattern showcases an Android app that mobile device users interact with and a Node.js back-end server that holds the application logic and talks to the IBM Cloud Kubernetes Service. The pattern demonstrates use of the IBM Identity and Access Management using the OpenID Connect specifications for a native application. It also showcases Watson Assistant to understand the natural language spoken by the mobile users, holding the context of the speech and converting the speakers’ intent into executable Kubernetes commands that are run on IBM Cloud.
 
-* Create an Android application connected with the OpenID Connect specifications for IBM IAM openID
-* Develop a Node.js server using Express.js which interfaces with the IBM Watson Assistant and IBM Kubernetes service
-* Setup Watson Assistant and create intents, entities and a dialog flow
-* Convert speech to text and text to speech natively for an Android application
-* Manage OpenID Connect authorization tokens on an Android application
-* Deploy a Node.js backend server on the IBM Kubernetes container service
+In this code pattern, you learn the following skills:
+
+* Create an Android application connected with the OpenID Connect specifications for IBM Identity and Access Management.
+* Develop a Node.js server using Express.js, which interfaces with the Watson Assistant and the IBM Cloud Kubernetes Service.
+* Set up Watson Assistant to create intents, entities, and a dialog flow.
+* Convert speech to text and text to speech, natively for an Android application.
+* Manage OpenID Connect authorization tokens on an Android application.
+* Deploy a Node.js back-end server on the IBM Cloud Kubernetes Service.
 
 # Architecture flow
 
@@ -76,7 +78,7 @@ Follow these steps to set up and run this code pattern. The steps are described 
 2. [Setup IBM IAM](#2-setup-ibm-iam)
 3. [Create IBM Cloud services](#3-create-ibm-cloud-services)
 4. [Configure Watson Assistant](#4-configure-watson-assistant)
-5. [Deploy NodeJS server to Kubernetes](#5-deploy-nodejs-server-to-kubernetes)
+5. [Deploy NodeJS server to Kubernetes](#5-deploy-nodejs-server-to-Kubernetes)
 6. [Configure Android Application](#6-configure-android-application)
 7. [Run the application](#7-run-the-application)
 
@@ -86,8 +88,8 @@ Follow these steps to set up and run this code pattern. The steps are described 
 Clone this repository in a folder your choice:
 
 ```bash
-git clone https://github.com/IBM/kubernetes-speech-assistant.git
-cd kubernetes-speech-assistant
+git clone https://github.com/IBM/Kubernetes-speech-assistant.git
+cd Kubernetes-speech-assistant
 ```
 
 ## 2. Setup IBM IAM
@@ -105,7 +107,7 @@ cd kubernetes-speech-assistant
 </p>
 <br>
 
-* Navigate to the file `app/src/main/java/com/example/kubernetesassistant/AppConfigTemplate.java` and paste the `API_KEY` value with the one copied.
+* Navigate to the file `app/src/main/java/com/example/Kubernetesassistant/AppConfigTemplate.java` and paste the `API_KEY` value with the one copied.
 
 <br>
 <p align="center">
@@ -113,20 +115,20 @@ cd kubernetes-speech-assistant
 </p>
 <br>
  
-* Rename `app/src/main/java/com/example/kubernetesassistant/AppConfigTemplate.java` to `app/src/main/java/com/example/kubernetesassistant/AppConfig.java`.
+* Rename `app/src/main/java/com/example/Kubernetesassistant/AppConfigTemplate.java` to `app/src/main/java/com/example/Kubernetesassistant/AppConfig.java`.
 
 ```bash
-cd app/src/main/java/com/example/kubernetesassistant
+cd app/src/main/java/com/example/Kubernetesassistant
 mv AppConfigTemplate.java AppConfig.java
 ```
 
 ## 3. Create IBM Cloud services
 
-* Create the [IBM Cloud Kubernetes Service](https://cloud.ibm.com/catalog/infrastructure/containers-kubernetes).  You can find the service in the `Catalog`.  For this code pattern, we can use the `Free` cluster, and give it a name.  Note, that the IBM Cloud allows one instance of a free cluster and expires after 30 days.
+* Create the [IBM Cloud Kubernetes Service](https://cloud.ibm.com/catalog/infrastructure/containers-Kubernetes).  You can find the service in the `Catalog`.  For this code pattern, we can use the `Free` cluster, and give it a name.  Note, that the IBM Cloud allows one instance of a free cluster and expires after 30 days.
 
 <br>
 <p align="center">
-  <img src="docs/doc-gifs/kubernetes-create.gif">
+  <img src="docs/doc-gifs/Kubernetes-create.gif">
 </p>
 <br>
 
@@ -198,8 +200,8 @@ cd server
 * Build the `Dockerfile` and push the image to your account on Dockerhub.
 
 ```bash
-docker build -t <DOCKERHUB_USERNAME>/kubernetes-assistant .
-docker push <DOCKERHUB_USERNAME>/kubernetes-assistant
+docker build -t <DOCKERHUB_USERNAME>/Kubernetes-assistant .
+docker push <DOCKERHUB_USERNAME>/Kubernetes-assistant
 ```
 
 * Modify the `manifest.yml` file (Line 15), to replace `<DOCKERHUB_USERNAME>` to your username.
@@ -208,7 +210,7 @@ docker push <DOCKERHUB_USERNAME>/kubernetes-assistant
 
 <br>
 <p align="center">
-  <img src="docs/doc-images/kubernetes-connect.png">
+  <img src="docs/doc-images/Kubernetes-connect.png">
 </p>
 <br>
 
@@ -223,7 +225,7 @@ kubectl apply -f manifest.yml
 ## 6. Configure Android Application
 
 * Open the codebase in `Android Studio` or an IDE of your choice.
-* Navigate to the file `app/src/main/java/com/example/kubernetesassistant/AppConfig.java` and paste the `SERVER_URL` value with the IP address copied.
+* Navigate to the file `app/src/main/java/com/example/Kubernetesassistant/AppConfig.java` and paste the `SERVER_URL` value with the IP address copied.
 
 ## 7. Run the application
 
