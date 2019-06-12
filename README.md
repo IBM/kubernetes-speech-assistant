@@ -19,6 +19,10 @@ In this code pattern, you learn the following skills:
 * Manage OpenID Connect authorization tokens on an Android application.
 * Deploy a Node.js back-end server on the IBM Cloud Kubernetes Service.
 
+> Note: This codebase has two branches:
+> * Branch `master` showcases using IAM with API-KEY
+> * Branch `using-iam-custom-ui` showcases using IAM with custom UI (This branch is not recommended for non-IBM developers as IAM currently doesn't support creating credentials for non-IBM developers)
+
 # Architecture flow
 
 <p align="center">
