@@ -218,9 +218,12 @@ docker push <DOCKERHUB_USERNAME>/kubernetes-assistant
 kubectl apply -f manifest.yml
 ```
 
+* Run the command `kubectl get svc`, and copy the external IP address.
+
 ## 6. Configure Android Application
 
-Steps coming...
+* Open the codebase in `Android Studio` or an IDE of your choice.
+* Navigate to the file `app/src/main/java/com/example/kubernetesassistant/AppConfig.java` and paste the `SERVER_URL` value with the IP address copied.
 
 ## 7. Run the application
 
