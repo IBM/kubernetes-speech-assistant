@@ -2,6 +2,8 @@
 
 >A Kubernetes Assistant that can manage your Kubernetes clusters on IBM Cloud through voice
 
+Watch the [video](https://youtu.be/MTG4uqiTpCg) to check out a demo of the application.
+
 Imagine being away from your computer when you realize you need to deploy a back end on a Kubernetes cluster that you have not yet provisioned. Knowing that provisioning a cluster could take several minutes after selecting the right configuration for your task, you visualize sitting in front of your computer staring idly at the screen, waiting for the cluster to be initialized and wishing that you could start work immediately.
 
 Not in my world!
@@ -235,8 +237,6 @@ kubectl apply -f manifest.yml
 
 Use `Android Studio` or the `CammandLine` to generate an APK and install the application on your Android Mobile device.
 Run the application.
-
-Watch the video here to check out a demo of the application:
 
 ## Links
 * [IBM Kubernetes REST Api](https://containers.cloud.ibm.com/swagger-api/#/)
